@@ -14,13 +14,13 @@ export default function Home() {
   const searchQuery = searchParams.get('q') || '';
 
   useEffect(() => {
-    axios.get('http://localhost:8000/api/products').then(res => setProducts(res.data)).catch(err => console.error(err));
+    axios.get('https://dongbei-shop-pro.onrender.com/api/products').then(res => setProducts(res.data)).catch(err => console.error(err));
   }, []);
 
   const quickAddToCart = async (e, productId) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:8000/api/cart', { product_id: productId, quantity: 1 });
+      await axios.post('https://dongbei-shop-pro.onrender.com/api/cart', { product_id: productId, quantity: 1 });
       alert('已成功加入购物车！');
     } catch (err) { alert('加购失败'); }
   };
@@ -132,4 +132,5 @@ export default function Home() {
       </div>
     </div>
   );
+
 }
