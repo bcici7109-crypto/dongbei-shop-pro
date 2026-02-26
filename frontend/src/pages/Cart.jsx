@@ -8,27 +8,27 @@ export default function Cart() {
   const [cartItems, setCartItems] = useState([]);
   const navigate = useNavigate();
 
-  const fetchCart = () => axios.get('http://localhost:8000/api/cart').then(res => setCartItems(res.data));
+  const fetchCart = () => axios.get('https://dongbei-shop-pro.onrender.com/api/cart').then(res => setCartItems(res.data));
   useEffect(() => { fetchCart(); }, []);
 
   const updateQuantity = async (cartId, currentQty, delta) => {
     const newQty = currentQty + delta;
     if (newQty < 1) return;
     try {
-      await axios.post('http://localhost:8000/api/cart', { product_id: cartItems.find(i => i.cart_id === cartId).id, quantity: delta });
+      await axios.post('https://dongbei-shop-pro.onrender.com/api/cart', { product_id: cartItems.find(i => i.cart_id === cartId).id, quantity: delta });
       fetchCart();
     } catch(err) { console.error(err); }
   };
 
   const removeItem = async (cartId) => {
-    await axios.delete(`http://localhost:8000/api/cart/${cartId}`);
+    await axios.delete(`https://dongbei-shop-pro.onrender.com/api/cart/${cartId}`);
     fetchCart();
   };
 
   const checkout = async () => {
     if (cartItems.length === 0) return;
     try {
-      await axios.post('http://localhost:8000/api/orders/checkout');
+      await axios.post('https://dongbei-shop-pro.onrender.com/api/orders/checkout');
       alert('✅ 支付成功！东北的美味正在打包中...');
       navigate('/profile');
     } catch (err) { alert('结算异常，请稍后重试'); }
@@ -146,4 +146,5 @@ export default function Cart() {
       </div>
     </div>
   );
+
 }
