@@ -13,16 +13,16 @@ export default function Profile({ favorites = [] }) {
 
   useEffect(() => {
     // 获取用户数据
-    axios.get('http://localhost:8000/api/user').then(res => { if (res.data) setFormData(res.data); });
+    axios.get('https://dongbei-shop-pro.onrender.com/api/user').then(res => { if (res.data) setFormData(res.data); });
     // 获取商品库，用于渲染收藏夹
-    axios.get('http://localhost:8000/api/products').then(res => setAllProducts(res.data));
+    axios.get('https://dongbei-shop-pro.onrender.com/api/products').then(res => setAllProducts(res.data));
   }, []);
 
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const saveUser = async () => {
     try {
-      await axios.put('http://localhost:8000/api/user', formData);
+      await axios.put('https://dongbei-shop-pro.onrender.com/api/user', formData);
       setIsEditing(false);
       alert('✅ 资料已同步至云端');
     } catch (err) { alert('同步失败'); }
@@ -198,4 +198,5 @@ export default function Profile({ favorites = [] }) {
       </div>
     </div>
   );
+
 }
