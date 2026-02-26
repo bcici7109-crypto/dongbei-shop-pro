@@ -1,20 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import axios from 'axios';
-import { ShoppingCart, Star, Zap, ShieldCheck } from 'lucide-react';
+import { ShoppingCart, Star, Zap, ShieldCheck, Loader2 } from 'lucide-react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 export default function Home() {
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true); // 新增加载状态
   const navigate = useNavigate();
   const location = useLocation();
 
-  // 获取 URL 里的查询参数 (比如 /?q=大米)
   const searchParams = new URLSearchParams(location.search);
   const searchQuery = searchParams.get('q') || '';
 
   useEffect(() => {
-    axios.get('https://dongbei-shop-pro.onrender.com/api/products').then(res => setProducts(res.data)).catch(err => console.error(err));
+    setLoading(true);
+    axios.get('https://dongbei-shop-pro.onrender.com/api/products')
+      .then(res => {
+        setProducts(res.data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error(err);
+        setLoading(false);
+      });
   }, []);
 
   const quickAddToCart = async (e, productId) => {
@@ -25,7 +34,6 @@ export default function Home() {
     } catch (err) { alert('加购失败'); }
   };
 
-  // 核心：如果存在 searchQuery，就对商品进行过滤；否则展示全部
   const filteredProducts = products.filter(p => 
     p.name.includes(searchQuery) || p.description.includes(searchQuery) || p.category.includes(searchQuery)
   );
@@ -36,10 +44,25 @@ export default function Home() {
     return acc;
   }, {});
 
+  // --- 新增：Render 服务器唤醒状态判断 ---
+  if (loading && products.length === 0) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4">
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center">
+          <Loader2 className="w-16 h-16 text-brand animate-spin mx-auto mb-6" />
+          <h2 className="text-3xl font-black text-slate-900 mb-4">正在唤醒“中央大脑”...</h2>
+          <p className="text-slate-500 max-w-md mx-auto leading-relaxed">
+            老铁莫急，由于咱用的是免费版服务器，首次访问需要约 <span className="text-brand font-bold">50 秒</span> 来预热。 <br/>
+            黑土地的极品珍馐正顶着风雪全速赶来！🌾
+          </p>
+        </motion.div>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-gray-100 min-h-screen pb-20">
-      
-      {/* 顶部广告位 (如果正在搜索，则隐藏广告以突出结果) */}
+      {/* 顶部广告位 (代码保持原样) */}
       {!searchQuery && (
         <div className="relative bg-slate-900 h-[300px] md:h-[400px] flex items-center justify-center overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-800 to-brand/20 z-0"></div>
@@ -54,10 +77,8 @@ export default function Home() {
         </div>
       )}
 
-      {/* 主体内容区 */}
+      {/* 主体内容区 (代码保持原样) */}
       <div className={`max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative z-20 ${searchQuery ? 'pt-12' : '-mt-10'}`}>
-        
-        {/* 如果有搜索词，显示搜索结果提示 */}
         {searchQuery && (
           <div className="mb-8 text-xl text-gray-800 font-bold">
             为您找到 "{searchQuery}" 的相关商品共 <span className="text-brand">{filteredProducts.length}</span> 件：
@@ -65,8 +86,7 @@ export default function Home() {
         )}
 
         <div className="flex flex-col lg:flex-row gap-8">
-          
-          {/* 左侧边栏 - 增加了 sticky top-28 和 h-fit 实现完美的滚动吸附 */}
+          {/* 左侧边栏 (代码保持原样) */}
           <div className="hidden lg:block w-64 shrink-0 space-y-6 sticky top-28 h-fit">
             <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
               <h3 className="font-bold text-lg mb-4 text-gray-900 border-b pb-2">热门分类</h3>
@@ -91,7 +111,7 @@ export default function Home() {
             </div>
           </div>
 
-          {/* 右侧商品流 */}
+          {/* 右侧商品流 (代码保持原样) */}
           <div className="flex-1 space-y-12">
             {Object.keys(groupedProducts).length === 0 ? (
               <div className="bg-white rounded-2xl p-20 text-center shadow-sm border border-gray-200">
@@ -132,5 +152,4 @@ export default function Home() {
       </div>
     </div>
   );
-
 }
