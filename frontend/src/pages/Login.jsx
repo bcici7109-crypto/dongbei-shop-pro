@@ -14,7 +14,7 @@ export default function Login() {
     localStorage.setItem('userName', '尊贵的东北老铁');
     
     alert(`✅ 模拟 ${provider} 登录成功！欢迎回来。`);
-    // 强制刷新页面并跳转，让所有组件重新读取登录状态
+    // 使用这种方式可以强制让 Navbar 重新感知到登录状态
     window.location.href = '/profile'; 
   };
 
