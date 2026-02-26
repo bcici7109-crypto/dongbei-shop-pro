@@ -27,7 +27,7 @@ export default function Navbar() {
     }
 
     const fetchCart = () => {
-      axios.get('http://localhost:8000/api/cart')
+      axios.get('https://dongbei-shop-pro.onrender.com/api/cart')
         .then(res => setCartCount(res.data.reduce((sum, item) => sum + item.quantity, 0)))
         .catch(() => {});
     };
@@ -181,4 +181,5 @@ export default function Navbar() {
       </AnimatePresence>
     </>
   );
+
 }
