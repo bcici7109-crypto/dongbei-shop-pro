@@ -16,7 +16,7 @@ export default function ProductDetail({ favorites = [], onToggleFavorite }) {
   const isFavorite = favorites.includes(productId);
 
   useEffect(() => {
-    axios.get(`http://localhost:8000/api/products/${productId}`)
+    axios.get(`https://dongbei-shop-pro.onrender.com/api/products/${productId}`)
       .then(res => setProduct(res.data))
       .catch(err => console.error("加载商品失败:", err));
     window.scrollTo(0, 0);
@@ -24,7 +24,7 @@ export default function ProductDetail({ favorites = [], onToggleFavorite }) {
 
   const addToCart = async () => {
     try {
-      await axios.post('http://localhost:8000/api/cart', { product_id: productId, quantity });
+      await axios.post('https://dongbei-shop-pro.onrender.com/api/cart', { product_id: productId, quantity });
       setShowToast(true);
       setTimeout(() => setShowToast(false), 3000);
     } catch (err) {
@@ -158,4 +158,5 @@ export default function ProductDetail({ favorites = [], onToggleFavorite }) {
       </div>
     </div>
   );
+
 }
